@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
-from src.schemas import PredictRequest, PredictResponse
-from src.predict import make_prediction
+from src.schemas import PredictRequest, PredictResponse, PredictRequestAll
+from src.predict import make_prediction, make_prediction_all
 from src.projection import get_projection
 from src.metrics import get_metrics
 
@@ -25,6 +25,15 @@ def predict(request: PredictRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+@app.post("/predict-all")
+def predict_all(request: PredictRequestAll):
+    try:
+        # Extract features explicitly
+        features = request.features
+        result = make_prediction_all(features)
+        return result  # Assuming this returns a dict with predictions for all models
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.get("/projection")
 def projection(method: str = Query("pca", enum=["pca", "tsne"])):

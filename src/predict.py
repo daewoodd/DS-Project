@@ -40,3 +40,13 @@ def make_prediction(features: dict[str, float], model_name: str):
     except Exception as e:
         print(f"An error occurred during prediction: {e}")
         return {"error": str(e)}
+
+def make_prediction_all(features: dict[str, float]):
+    results = {}
+    for model_name in MODELS.keys():
+        try:
+            result = make_prediction(features, model_name)
+            results[model_name] = result
+        except ValueError as e:
+            results[model_name] = {"error": str(e)}
+    return results
