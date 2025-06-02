@@ -76,3 +76,31 @@ pd.DataFrame(X_test_scaled, columns=X.columns).to_csv("models/X_test_scaled.csv"
 y_test.to_csv("models/y_test.csv", index=False)
 
 print("Evaluation results saved.")
+
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
+
+# Generate projections
+projections = {}
+
+# PCA projection
+pca = PCA(n_components=2)
+pca_result = pca.fit_transform(X_test_scaled)
+projections["pca"] = [
+    {"x": float(x), "y": float(y), "label": label}
+    for (x, y), label in zip(pca_result, y_test)
+]
+
+# t-SNE projection
+tsne = TSNE(n_components=2, perplexity=30, n_iter=1000, random_state=42)
+tsne_result = tsne.fit_transform(X_test_scaled)
+projections["tsne"] = [
+    {"x": float(x), "y": float(y), "label": label}
+    for (x, y), label in zip(tsne_result, y_test)
+]
+
+# Save both projections
+with open("models/projections.json", "w") as f:
+    json.dump(projections, f)
+
+print("Projections saved.")

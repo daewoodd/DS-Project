@@ -1,0 +1,3 @@
+python -m pytest tests/
+
+while in root directory
