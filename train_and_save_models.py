@@ -23,13 +23,6 @@ X_imputed = imputer.fit_transform(X)
 # Save the imputer
 joblib.dump(imputer, "models/imputer.pkl")
 
-# Normalize the imputed data
-scaler = MinMaxScaler()
-X_normalized = scaler.fit_transform(X_imputed)
-
-# Save the scaler
-joblib.dump(scaler, "models/scaler.pkl")
-
 # Train/test split
 X_train, X_test, y_train, y_test = train_test_split(X_imputed, y, stratify=y, random_state=42)
 
